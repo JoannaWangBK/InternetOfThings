@@ -19,7 +19,7 @@ facealg = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
 #connect to camera
 #cap = cv.VideoCapture(1)
-
+num = 0
 while(True):
 
     #read image in gray scale
@@ -37,9 +37,10 @@ while(True):
     
         #encode and public message
         rc,png = cv2.imencode('.png', roi_gray)
+        #cv2.imwrite('test_file'+str(num) + '.png', roi_gray)
         msg = png.tobytes()
-        mqttc.publish(MQTT_TOPIC, msg, qos=0, retain=False)
-    
+        ret = mqttc.publish(MQTT_TOPIC, msg, qos=0, retain=False)
+        print(ret)
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
