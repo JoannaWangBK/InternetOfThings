@@ -6,8 +6,7 @@ import time
 MQTT_BROKER = "mosquitto"
 MQTT_TOPIC = "faces"
 
-# 1 should correspond to /dev/video1, the USB camera. The 0 is reserved for the TX2 onboard camera
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 print("Is cap opened:", cap.isOpened())
 
 # create mqtt client for publishing
@@ -27,24 +26,20 @@ while(True):
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
 
-    cv2.imshow('frame', gray)
-
+    #cv2.imshow('frame', gray)
+    
     #detect a face
     faces = facealg.detectMultiScale(gray,1.3,5)
     for (x,y,w,h) in faces:
-        
+        print("New img")
         #cut the face from the frame
         roi_gray = gray[y:y+h, x:x+w]
     
         #encode and public message
         rc,png = cv2.imencode('.png', roi_gray)
-        msg = pickle.dumps(png)
-        mqtt_client.publish(LOCAL_MQTT_TOPIC, msg, qos=0, retain=False)
+        msg = png.tobytes()
+        mqttc.publish(MQTT_TOPIC, msg, qos=0, retain=False)
     
-    #quit capturing
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
