@@ -45,10 +45,12 @@ def on_message(client,userdata, msg):
 
     
 #create local mqtt client
+print(1)
 local_mqttclient = mqtt.Client()
 local_mqttclient.on_connect = on_connect_local
-local_mqttclient.connect(LOCAL_MQTT_HOST, LOCAL_MQTT_PORT, 60)
 local_mqttclient.on_message = on_message
+local_mqttclient.connect(LOCAL_MQTT_HOST, LOCAL_MQTT_PORT, 60)
+
 
 #create remote mqtt client
 remote_mqtt_client = mqtt.Client()
