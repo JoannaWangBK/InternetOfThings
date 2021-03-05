@@ -4,7 +4,7 @@ import sys
 #remote info
 REMOTE_MQTT_HOST = "ec2-3-142-12-11.us-east-2.compute.amazonaws.com"
 REMOTE_MQTT_PORT = 1883
-REMOTE_MQTT_TOPIC = "facedetector_topic"
+REMOTE_MQTT_TOPIC = "faces"
 
 #local info
 LOCAL_MQTT_HOST = "mosquitto"
@@ -45,7 +45,7 @@ def on_message(client,userdata, msg):
 
     
 #create local mqtt client
-print(1)
+print("Local")
 local_mqttclient = mqtt.Client()
 local_mqttclient.on_connect = on_connect_local
 local_mqttclient.on_message = on_message
@@ -53,6 +53,7 @@ local_mqttclient.connect(LOCAL_MQTT_HOST, LOCAL_MQTT_PORT, 60)
 
 
 #create remote mqtt client
+print("Remote")
 remote_mqtt_client = mqtt.Client()
 remote_mqtt_client.on_connect = on_connect_remote
 remote_mqtt_client.on_publish = on_publish_remote
